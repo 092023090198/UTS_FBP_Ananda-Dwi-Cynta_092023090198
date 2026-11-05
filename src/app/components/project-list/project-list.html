@@ -1,0 +1,168 @@
+
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <header class="dashboard-header">
+
+    <!-- BRAND / LOGO RENCAKAKU -->
+    <div class="brand">
+
+      <div class="brand-logo">
+        <img
+          src="/rencanaku-logo-bulat.png"
+          alt="Logo Rencanaku"
+        />
+      </div>
+
+      <div class="brand-info">
+        <h1>Rencanaku</h1>
+        <p>Susun Rencana, Wujudkan Tujuan.</p>
+      </div>
+
+    </div>
+
+    <!-- BUTTON TAMBAH PROJECT -->
+    <button
+      class="btn-tambah"
+      *ngIf="!isFormVisible"
+      (click)="onTambahProject()">
+      <span>＋</span> Tambah Project
+    </button>
+
+  </header>
+
+
+  <!-- WELCOME SECTION -->
+  <section class="welcome-section" *ngIf="!isFormVisible">
+
+    <div>
+      <span class="welcome-label">WORKSPACE OVERVIEW</span>
+      <h2>Halo, Freelancer! 👋</h2>
+      <p>Yuk, atur dan pantau semua project kamu di sini.</p>
+    </div>
+
+    <div class="welcome-decoration">✦</div>
+
+  </section>
+
+
+  <!-- STATISTICS -->
+  <section class="stats-grid" *ngIf="!isFormVisible">
+
+    <div class="stat-card stat-blue">
+      <div class="stat-icon">📁</div>
+      <div>
+        <span>Total Project</span>
+        <h3>{{ projectList.length }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card stat-orange">
+      <div class="stat-icon">⏳</div>
+      <div>
+        <span>On Progress</span>
+        <h3>{{ totalProgress }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card stat-green">
+      <div class="stat-icon">✓</div>
+      <div>
+        <span>Project Selesai</span>
+        <h3>{{ totalSelesai }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card stat-pink">
+      <div class="stat-icon">☷</div>
+      <div>
+        <span>Total Task</span>
+        <h3>{{ totalTask }}</h3>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- PROJECT FORM -->
+  <app-project-form
+    *ngIf="isFormVisible"
+    (simpanProject)="onSimpanProject($event)"
+    (batalForm)="onBatalForm()">
+  </app-project-form>
+
+
+  <!-- PROJECT CONTENT -->
+  <ng-container *ngIf="!isFormVisible">
+
+    <!-- SECTION HEADING -->
+    <div class="section-heading">
+
+      <div>
+        <h2>My Projects</h2>
+        <p>Semua project yang sedang kamu kelola.</p>
+      </div>
+
+      <span class="project-count">
+        {{ projectList.length }} Project
+      </span>
+
+    </div>
+
+
+    <!-- PROJECT EMPTY / POPULATED STATE -->
+    <ng-container
+      *ngIf="!isProjectEmpty; then populatedState; else emptyState">
+    </ng-container>
+
+
+    <!-- EMPTY STATE -->
+    <ng-template #emptyState>
+
+      <div class="empty-state">
+
+        <div class="empty-illustration">🗂️</div>
+
+        <h3>Belum ada project nih!</h3>
+
+        <p>
+          Semua project yang kamu buat akan muncul di sini.
+          Yuk, mulai dengan menambahkan project pertamamu.
+        </p>
+
+        <button
+          class="btn-empty"
+          (click)="onTambahProject()">
+          + Buat Project Pertama
+        </button>
+
+      </div>
+
+    </ng-template>
+
+
+    <!-- POPULATED STATE -->
+    <ng-template #populatedState>
+
+      <div class="project-grid">
+
+        <app-project-card
+          *ngFor="let project of projectList; trackBy: trackByProjectId"
+          [project]="project"
+          (hapusProject)="onHapusProject($event)"
+          (ubahStatus)="onUbahStatus($event)">
+        </app-project-card>
+
+      </div>
+
+    </ng-template>
+
+  </ng-container>
+
+
+  <!-- FOOTER -->
+  <footer class="dashboard-footer" *ngIf="!isFormVisible">
+    Made for better productivity ✨
+  </footer>
+
+</div>

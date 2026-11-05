@@ -1,0 +1,201 @@
+<div class="form-wrapper">
+
+  <h2>Tambah Project Baru</h2>
+
+  <form [formGroup]="projectForm">
+
+    <!-- ── INFO PROJECT ──────────────────────────────────── -->
+    <div class="field-group">
+      <label>Nama Project</label>
+      <input formControlName="namaProject" type="text" placeholder="Contoh: Website Toko Online"/>
+      <span class="error"
+        *ngIf="projectForm.get('namaProject')?.invalid &&
+               projectForm.get('namaProject')?.touched">
+        Nama project wajib diisi
+      </span>
+    </div>
+
+    <div class="field-group">
+      <label>Nama Klien</label>
+      <input formControlName="namaKlien" type="text" placeholder="Contoh: Bu Sari"/>
+      <span class="error"
+        *ngIf="projectForm.get('namaKlien')?.invalid &&
+               projectForm.get('namaKlien')?.touched">
+        Nama klien wajib diisi
+      </span>
+    </div>
+
+    <div class="field-group">
+      <label>Deadline</label>
+      <input formControlName="deadline" type="date"/>
+      <span class="error"
+        *ngIf="projectForm.get('deadline')?.invalid &&
+               projectForm.get('deadline')?.touched">
+        Deadline wajib diisi
+      </span>
+    </div>
+
+    <!-- ── SECTION TASK ───────────────────────────────────── -->
+    <div class="task-section" formArrayName="tasks">
+
+      <div class="task-header">
+        <h3>Daftar Task</h3>
+        <!-- 5.3: Counter total estimasi — getter isTotalOverLimit -->
+        <span class="counter" [class.over-limit]="isTotalOverLimit">
+          Total estimasi: {{ totalEstimasiJam }} jam
+          <span *ngIf="isTotalOverLimit"> ⚠ Melebihi batas 100 jam</span>
+        </span>
+      </div>
+
+      <!-- 5.3: ng-template — Empty State vs Populated State -->
+      <ng-container
+        *ngIf="tasks.length > 0; then populatedState; else emptyState">
+      </ng-container>
+
+      <!-- Template: belum ada task -->
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <p>📋 Belum ada task. Tambahkan task pertama!</p>
+        </div>
+      </ng-template>
+
+      <!-- Template: sudah ada task -->
+      <ng-template #populatedState>
+
+        <!-- 5.2: *ngFor dengan context variables index, first, last -->
+        <div
+          *ngFor="let task of tasks.controls;
+                  index as i;
+                  first as isFirst;
+                  last as isLast;
+                  trackBy: trackByIndex"
+          [formGroupName]="i"
+          class="task-row"
+          [class.first-task]="isFirst"
+          [class.last-task]="isLast">
+
+          <!-- Nomor urut pakai index -->
+          <span class="task-number">Task {{ i + 1 }}</span>
+
+          <!-- Input nama task -->
+          <div class="field-group">
+            <label>Nama Task</label>
+            <input formControlName="namaTask" type="text"
+                   placeholder="Contoh: Desain UI"/>
+            <!-- 5.1: Cross-validation duplikasi — pakai getter -->
+            <span class="error" *ngIf="isDuplicateTask(i)">
+              Nama task sudah digunakan di baris lain
+            </span>
+            <span class="error"
+              *ngIf="task.get('namaTask')?.invalid &&
+                     task.get('namaTask')?.touched">
+              Nama task wajib diisi
+            </span>
+          </div>
+
+          <!-- Input estimasi jam -->
+          <div class="field-group">
+            <label>Estimasi Jam</label>
+            <input formControlName="estimasiJam" type="number" min="1"/>
+            <span class="error"
+              *ngIf="task.get('estimasiJam')?.invalid &&
+                     task.get('estimasiJam')?.touched">
+              Estimasi harus lebih dari 0
+            </span>
+          </div>
+
+          <!-- Tombol hapus task — dikunci di baris pertama pakai first -->
+          <button
+            type="button"
+            class="btn-hapus"
+            [disabled]="isFirst"
+            (click)="onHapusTask(i)">
+            Hapus Task
+          </button>
+
+          <!-- ── SUBTASK (nested loop) ─────────────────────── -->
+          <div class="subtask-section" formArrayName="subtasks">
+
+            <h4>Subtask</h4>
+
+            <!-- 5.2: Nested *ngFor untuk subtask -->
+            <div
+              *ngFor="let subtask of getSubtasks(i).controls;
+                      index as j;
+                      trackBy: trackByIndex"
+              [formGroupName]="j"
+              class="subtask-row">
+
+              <span class="subtask-number">{{ j + 1 }}</span>
+
+              <div class="field-group">
+                <input formControlName="namaSubtask" type="text"
+                       placeholder="Contoh: Buat wireframe"/>
+                <span class="error"
+                  *ngIf="subtask.get('namaSubtask')?.invalid &&
+                         subtask.get('namaSubtask')?.touched">
+                  Nama subtask wajib diisi
+                </span>
+              </div>
+
+              <button
+                type="button"
+                class="btn-hapus-sm"
+                (click)="onHapusSubtask(i, j)">
+                ✕
+              </button>
+
+            </div>
+
+            <!-- Tombol tambah subtask -->
+            <button
+              type="button"
+              class="btn-add-subtask"
+              (click)="onTambahSubtask(i)">
+              + Tambah Subtask
+            </button>
+
+          </div>
+          <!-- end subtask-section -->
+
+        </div>
+        <!-- end *ngFor task -->
+
+      </ng-template>
+      <!-- end populatedState -->
+
+    </div>
+    <!-- end task-section -->
+
+    <!-- Tombol tambah task — disabled kalau sudah 10 task -->
+    <button
+      type="button"
+      class="btn-add-task"
+      [disabled]="isTaskLimitReached"
+      (click)="onTambahTask()">
+      + Tambah Task
+    </button>
+    <span class="hint" *ngIf="isTaskLimitReached">
+      Maksimal 10 task per project
+    </span>
+
+    <!-- Tombol aksi form -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn-simpan"
+        [disabled]="!isFormValid || isTotalOverLimit"
+        (click)="onSimpanProject()">
+        Simpan Project
+      </button>
+      <button
+        type="button"
+        class="btn-batal"
+        (click)="onBatalForm()">
+        Batal
+      </button>
+    </div>
+
+  </form>
+
+</div>

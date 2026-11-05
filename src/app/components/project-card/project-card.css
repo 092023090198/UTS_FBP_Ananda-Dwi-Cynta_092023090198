@@ -1,0 +1,247 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #ebeaf4;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 3px 12px #20204b0a;
+  font-family: 'Segoe UI', sans-serif;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px #20204b14;
+}
+
+.card-top-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #6254d9, #e78ab5, #69c9a6);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 5px 0 20px;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.project-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #eeebff;
+  border-radius: 12px;
+  font-size: 19px;
+}
+
+.card-title h3 {
+  font-size: 15px;
+  color: #292a4c;
+  margin: 0 0 5px;
+  overflow-wrap: anywhere;
+}
+
+.klien {
+  font-size: 11px;
+  color: #9294aa;
+}
+
+.badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+.status-progress {
+  background: #fff0dc;
+  color: #d58a27;
+}
+
+.status-completed {
+  background: #ddf7eb;
+  color: #229b70;
+}
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #f5f5fb;
+  color: #777991;
+  padding: 7px 9px;
+  border-radius: 8px;
+  font-size: 10px;
+}
+
+.meta-icon {
+  font-size: 12px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.card-actions button {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 9px 11px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-detail {
+  flex: 1;
+  background: #eeebff;
+  color: #6254d9;
+  border: none;
+}
+
+.btn-detail:hover {
+  background: #ded9ff;
+}
+
+.btn-status {
+  background: #e1f7ed;
+  color: #229b70;
+  border: 1px solid #c1ecd9;
+}
+
+.btn-status:hover {
+  background: #229b70;
+  color: white;
+}
+
+.btn-hapus {
+  background: #fff0f1;
+  color: #df6570;
+  border: 1px solid #ffd9dc;
+}
+
+.btn-hapus:hover {
+  background: #df6570;
+  color: white;
+}
+
+.detail-section {
+  margin-top: 17px;
+  padding-top: 15px;
+  border-top: 1px solid #eeedf4;
+}
+
+.no-task {
+  text-align: center;
+  color: #999aaf;
+  font-size: 12px;
+  padding: 12px 0;
+}
+
+.task-item {
+  background: #f8f8fd;
+  border: 1px solid #eeedf5;
+  border-radius: 9px;
+  padding: 11px;
+  margin-bottom: 9px;
+}
+
+.task-item.first-task {
+  border-left: 3px solid #7668df;
+}
+
+.task-item.last-task {
+  border-left: 3px solid #69c9a6;
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.task-num {
+  font-size: 10px;
+  font-weight: 700;
+  background: #e9e5ff;
+  color: #6254d9;
+  padding: 4px 7px;
+  border-radius: 7px;
+}
+
+.task-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: #353653;
+  overflow-wrap: anywhere;
+}
+
+.task-jam {
+  font-size: 10px;
+  color: #9294aa;
+}
+
+.subtask-list {
+  margin: 10px 0 0 10px;
+  padding-left: 12px;
+  border-left: 2px solid #e3defe;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #777991;
+  padding: 4px 0;
+}
+
+.subtask-num {
+  color: #aaaabd;
+  min-width: 14px;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+  }
+
+  .card-header {
+    flex-wrap: wrap;
+  }
+
+  .card-actions {
+    flex-wrap: wrap;
+  }
+
+  .card-actions button {
+    padding: 9px;
+  }
+}

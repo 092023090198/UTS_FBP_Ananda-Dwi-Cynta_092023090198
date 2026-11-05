@@ -1,0 +1,93 @@
+<div class="card">
+
+  <div class="card-top-line"></div>
+
+  <div class="card-header">
+    <div class="card-title">
+      <div class="project-icon">📌</div>
+      <div>
+        <h3>{{ project.namaProject }}</h3>
+        <span class="klien">Client: {{ project.namaKlien }}</span>
+      </div>
+    </div>
+
+    <span class="badge" [ngClass]="getStatusClass(project.status)">
+      {{ project.status }}
+    </span>
+  </div>
+
+  <div class="card-meta">
+    <div class="meta-item">
+      <span class="meta-icon">📅</span>
+      <span>{{ project.deadline }}</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-icon">📋</span>
+      <span>{{ totalTask }} task</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-icon">⏱</span>
+      <span>{{ totalEstimasi }} jam</span>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button class="btn-detail" (click)="onToggleDetail()">
+      {{ isDetailVisible ? 'Sembunyikan Detail' : 'Lihat Detail' }}
+    </button>
+
+    <button class="btn-status" (click)="onUbahStatus()">
+      Ubah Status
+    </button>
+
+    <button class="btn-hapus" (click)="onHapus()">
+      Hapus
+    </button>
+  </div>
+
+  <div class="detail-section" *ngIf="isDetailVisible">
+
+    <ng-container
+      *ngIf="project.tasks.length > 0; then taskList; else noTask">
+    </ng-container>
+
+    <ng-template #noTask>
+      <p class="no-task">Belum ada task di project ini.</p>
+    </ng-template>
+
+    <ng-template #taskList>
+
+      <div
+        *ngFor="let task of project.tasks;
+                index as i;
+                first as isFirst;
+                last as isLast;
+                trackBy: trackByIndex"
+        class="task-item"
+        [class.first-task]="isFirst"
+        [class.last-task]="isLast">
+
+        <div class="task-info">
+          <span class="task-num">{{ i + 1 }}</span>
+          <span class="task-name">{{ task.namaTask }}</span>
+          <span class="task-jam">{{ task.estimasiJam }} jam</span>
+        </div>
+
+        <div class="subtask-list" *ngIf="task.subtasks.length > 0">
+          <div
+            *ngFor="let subtask of task.subtasks;
+                    index as j;
+                    trackBy: trackByIndex"
+            class="subtask-item">
+            <span class="subtask-num">{{ j + 1 }}</span>
+            <span>{{ subtask.namaSubtask }}</span>
+          </div>
+        </div>
+
+      </div>
+
+    </ng-template>
+
+  </div>
+
+</div>
